@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Crossy Road: Custom Edition</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div id="game"></div>
+
+    <div id="hud" class="hidden">
+      <div class="hud-left">
+        <div id="score">0</div>
+        <div id="best">TOP 0</div>
+      </div>
+      <div class="hud-right">
+        <div id="weather-badge">
+          <span id="weather-icon">☀️</span>
+          <span id="weather-label">Clear Skies</span>
+          <div id="weather-bar"><div id="weather-fill"></div></div>
+        </div>
+        <button id="btn-mute" class="icon-btn" title="Sound on/off">🔊</button>
+        <button id="btn-pause" class="icon-btn" title="Pause (Esc)">⏸</button>
+      </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <div id="menu" class="overlay">
+      <div class="panel">
+        <h1>CROSSY ROAD<small>Custom Edition</small></h1>
+        <p class="sub">Hop forward, dodge traffic, ride logs — and survive the weather.</p>
+
+        <div class="section-head">
+          <h2>Characters</h2>
+          <label class="btn btn-small" for="file-input">＋ Import FBX / VRM</label>
+          <input id="file-input" type="file" accept=".fbx,.vrm" multiple hidden />
+        </div>
+        <div id="char-grid"></div>
+        <p class="drop-hint">Tip: drag &amp; drop <b>.fbx</b> or <b>.vrm</b> files anywhere on this screen. Use ⟳ if a model faces the wrong way.</p>
+
+        <div class="options">
+          <label>Weather
+            <select id="weather-mode">
+              <option value="dynamic">Dynamic (changes as you play)</option>
+              <option value="clear">Always clear</option>
+              <option value="rain">Always rain</option>
+              <option value="storm">Always thunderstorm</option>
+              <option value="snow">Always snow</option>
+              <option value="fog">Always fog</option>
+              <option value="wind">Always gale</option>
+              <option value="heat">Always heatwave</option>
+            </select>
+          </label>
+        </div>
+
+        <button id="btn-play" class="btn btn-big">▶ PLAY</button>
+        <p class="controls">Arrows / WASD to hop · Tap or swipe on mobile · Esc to pause</p>
+      </div>
+    </div>
+
+    <div id="gameover" class="overlay hidden">
+      <div class="panel small">
+        <div id="death-reason">Splat!</div>
+        <div class="final-score"><span id="final-score">0</span><small>rows crossed</small></div>
+        <div id="new-record" class="hidden">🏆 NEW RECORD!</div>
+        <div id="char-record"></div>
+        <div class="row">
+          <button id="btn-retry" class="btn btn-big">↻ RETRY</button>
+          <button id="btn-menu" class="btn">Characters</button>
+        </div>
+        <p class="controls">Space to retry</p>
+      </div>
+    </div>
+
+    <div id="paused" class="overlay hidden">
+      <div class="panel small">
+        <h2>Paused</h2>
+        <div class="row">
+          <button id="btn-resume" class="btn btn-big">▶ Resume</button>
+          <button id="btn-quit" class="btn">Quit run</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="loading" class="overlay hidden"><div class="spinner"></div><div id="loading-text">Loading…</div></div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
