@@ -53,6 +53,30 @@ Object.assign(sun.shadow.camera, { left: -18, right: 18, top: 18, bottom: -18, n
 sun.shadow.bias = -0.0008;
 scene.add(sun, sun.target);
 
+// Camera zoom setting (1 = default). Higher values zoom in.
+const ZOOM_MIN = 0.6;
+const ZOOM_MAX = 1.6;
+let cameraZoom = 1;
+try {
+  const saved = parseFloat(localStorage.getItem('crossy.zoom'));
+  if (Number.isFinite(saved)) cameraZoom = THREE.MathUtils.clamp(saved, ZOOM_MIN, ZOOM_MAX);
+} catch {
+  /* storage blocked */
+}
+
+function setZoom(z) {
+  cameraZoom = Math.round(THREE.MathUtils.clamp(z, ZOOM_MIN, ZOOM_MAX) * 100) / 100;
+  camera.zoom = cameraZoom;
+  camera.updateProjectionMatrix();
+  try {
+    localStorage.setItem('crossy.zoom', String(cameraZoom));
+  } catch {
+    /* storage blocked */
+  }
+  for (const el of document.querySelectorAll('.zoom-slider')) el.value = cameraZoom;
+  for (const el of document.querySelectorAll('.zoom-value')) el.textContent = `${Math.round(cameraZoom * 100)}%`;
+}
+
 function resize() {
   const w = window.innerWidth;
   const h = window.innerHeight;
@@ -60,6 +84,7 @@ function resize() {
   const halfW = Math.max(5.2 * aspect, 5.8);
   const halfH = halfW / aspect;
   Object.assign(camera, { left: -halfW, right: halfW, top: halfH, bottom: -halfH });
+  camera.zoom = cameraZoom;
   camera.updateProjectionMatrix();
   renderer.setSize(w, h);
 }
@@ -290,6 +315,7 @@ function setPaused(p) {
     state = 'paused';
     $('paused').classList.remove('hidden');
   } else if (!p && state === 'paused') {
+    if (document.activeElement) document.activeElement.blur();
     state = 'playing';
     $('paused').classList.add('hidden');
   }
@@ -384,6 +410,8 @@ window.addEventListener('keydown', (e) => {
     if (!e.repeat) tryHop(KEYS[e.code]);
     return;
   }
+  if (e.code === 'Equal' || e.code === 'NumpadAdd') return setZoom(cameraZoom + 0.1);
+  if (e.code === 'Minus' || e.code === 'NumpadSubtract') return setZoom(cameraZoom - 0.1);
   if (e.code === 'Escape') {
     if (state === 'playing') setPaused(true);
     else if (state === 'paused') setPaused(false);
@@ -428,6 +456,22 @@ $('file-input').onchange = (e) => {
   e.target.value = '';
   importFiles(files);
 };
+for (const el of document.querySelectorAll('.zoom-slider')) {
+  el.min = ZOOM_MIN;
+  el.max = ZOOM_MAX;
+  el.addEventListener('input', () => setZoom(parseFloat(el.value)));
+  // Give keyboard focus back to the game so arrow keys hop instead of moving the slider.
+  el.addEventListener('change', () => el.blur());
+}
+renderer.domElement.addEventListener(
+  'wheel',
+  (e) => {
+    e.preventDefault();
+    setZoom(cameraZoom * (e.deltaY < 0 ? 1.08 : 1 / 1.08));
+  },
+  { passive: false }
+);
+setZoom(cameraZoom);
 $('weather-mode').value = weatherMode;
 $('weather-mode').onchange = (e) => {
   weatherMode = e.target.value;
@@ -696,6 +740,14 @@ function frame() {
   updateHud();
   requestAnimationFrame(frame);
 })();
+
+// When run from the desktop .exe, tell the launcher the window is still open
+// (it quits a while after the pings stop).
+if (new URLSearchParams(location.search).has('launcher')) {
+  const ping = () => fetch('/__launcher/ping', { cache: 'no-store' }).catch(() => {});
+  ping();
+  setInterval(ping, 5000);
+}
 
 // Handy for debugging from the browser console.
 window.__crossy = { weather, world, player, startGame };

@@ -85,13 +85,13 @@ export class World {
   reset() {
     for (const lane of this.lanes.values()) lane.dispose();
     this.lanes.clear();
-    this.maxRow = -9;
+    this.maxRow = -21;
     this.lastType = null;
     this.runLeft = 0;
     this.lastRiverDir = 1;
     this.mustFree = null; // columns the next lane must keep open
     this.applySnow(0);
-    for (let r = -8; r < 0; r++) this._add(this._grass(r, { wall: true }));
+    for (let r = -20; r < 0; r++) this._add(this._grass(r, { wall: true }));
     for (let r = 0; r <= 4; r++) this._add(this._grass(r, { start: true }));
     this.lastType = 'grass';
     this.ensure(0);
@@ -103,9 +103,9 @@ export class World {
 
   /** Generates lanes ahead of and drops lanes far behind `row`. */
   ensure(row) {
-    while (this.maxRow < row + 28) this._add(this._next(this.maxRow + 1));
+    while (this.maxRow < row + 36) this._add(this._next(this.maxRow + 1));
     for (const [r, lane] of this.lanes) {
-      if (r < row - 14) {
+      if (r < row - 22) {
         lane.dispose();
         this.lanes.delete(r);
       }

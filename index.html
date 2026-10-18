@@ -41,6 +41,10 @@
         <p class="drop-hint">Tip: drag &amp; drop <b>.fbx</b> or <b>.vrm</b> files anywhere on this screen. Use ⟳ if a model faces the wrong way.</p>
 
         <div class="options">
+          <label>Camera zoom
+            <input class="zoom-slider" type="range" step="0.05" value="1" />
+            <span class="zoom-value">100%</span>
+          </label>
           <label>Weather
             <select id="weather-mode">
               <option value="dynamic">Dynamic (changes as you play)</option>
@@ -56,7 +60,7 @@
         </div>
 
         <button id="btn-play" class="btn btn-big">▶ PLAY</button>
-        <p class="controls">Arrows / WASD to hop · Tap or swipe on mobile · Esc to pause</p>
+        <p class="controls">Arrows / WASD to hop · Tap or swipe on mobile · Esc to pause · + / − or mouse wheel to zoom</p>
       </div>
     </div>
 
@@ -77,6 +81,10 @@
     <div id="paused" class="overlay hidden">
       <div class="panel small">
         <h2>Paused</h2>
+        <label class="pause-zoom">Camera zoom
+          <input class="zoom-slider" type="range" step="0.05" value="1" />
+          <span class="zoom-value">100%</span>
+        </label>
         <div class="row">
           <button id="btn-resume" class="btn btn-big">▶ Resume</button>
           <button id="btn-quit" class="btn">Quit run</button>

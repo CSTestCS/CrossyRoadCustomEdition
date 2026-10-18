@@ -11,10 +11,31 @@ npm run dev      # local dev server
 npm run build    # static build in dist/ (works from any folder, e.g. GitHub Pages)
 ```
 
+## Windows .exe
+
+`CrossyRoad.exe` is a single file with the whole game inside — no install needed. Double-click it and the
+game opens in its own window (using Microsoft Edge's app mode, which is built into Windows 10 and 11; it falls back
+to your default browser if Edge and Chrome are missing). Closing the window quits the game.
+
+Imported characters and records are saved in `%LOCALAPPDATA%\CrossyRoadCustomEdition`, separate from your normal
+browser data.
+
+**Get it:** download the `CrossyRoad-windows` artifact from the latest *Build Windows exe* run in the repo's
+**Actions** tab (pushing a `v*` tag also attaches it to a GitHub release), or build it yourself:
+
+```bash
+npm install
+npm run build:exe        # needs Go 1.22+ (https://go.dev/dl) -> release/CrossyRoad.exe
+```
+
+For a custom icon in the exe, also install `go install github.com/tc-hib/go-winres@latest` (optional). The launcher
+source is in `desktop/launcher/`.
+
 ## How to play
 
 - **Arrows / WASD** to hop. On touch screens, tap to hop forward or swipe to hop in a direction.
 - **Esc** pauses, **Space** retries after a game over.
+- **Camera zoom:** use the slider on the main menu or pause screen, the **+ / −** keys, or the mouse wheel. Your zoom level is remembered.
 - Cross roads, rivers (ride the logs, hop on lily pads) and railways (watch the flashing signal).
 - Don't fall behind or stand still too long — the eagle is watching.
 
@@ -58,3 +79,5 @@ The game records the furthest distance (rows crossed) and the number of runs for
 | `src/models.js` | Voxel meshes for the world and built-in characters |
 | `src/storage.js` | IndexedDB (imported models) and localStorage (records) |
 | `src/audio.js` | Synthesised sound effects |
+| `desktop/launcher/` | Go launcher that embeds the web build into `CrossyRoad.exe` |
+| `scripts/build-exe.mjs` | Builds the web game and compiles the exe |

@@ -70,7 +70,11 @@ h2 { margin: 0; font-size: 22px; }
 
 .drop-hint { font-size: 13px; opacity: 0.75; margin: 10px 0; }
 body.dragging #menu .panel { outline: 4px dashed #ffeb3b; outline-offset: 4px; }
-.options { margin: 8px 0 16px; }
+.options { margin: 8px 0 16px; display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; }
+.options label, .pause-zoom { display: inline-flex; align-items: center; gap: 8px; }
+.pause-zoom { margin-top: 14px; }
+.zoom-slider { width: 140px; accent-color: #ffeb3b; }
+.zoom-value { min-width: 3.2em; font-weight: 700; }
 .options select { margin-left: 8px; padding: 6px 8px; border-radius: 8px; border: 0; font: inherit; }
 
 .btn {
